@@ -4,10 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
-    tools:context=".MainActivity">
-
-
+    android:background="#c6c6c6"
+    tools:context=".MessageActivity">
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
@@ -29,18 +27,33 @@
                 android:text="username"
                 android:id="@+id/username"/>
         </androidx.appcompat.widget.Toolbar>
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/main_tabs"
+    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recycler_view"
+        android:layout_below="@id/appbar_layout"
+        android:layout_above="@id/rl_bottom"/>
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#fff"
+        android:padding="5dp">
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
-    </com.google.android.material.appbar.AppBarLayout>
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/main_viewpager"
-        android:layout_below="@id/appbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </androidx.viewpager.widget.ViewPager>
-
+            android:id="@+id/edt_send"
+            android:hint="Type a message..."
+            android:layout_toLeftOf="@+id/btn_send"
+            android:layout_centerVertical="true"/>
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/btn_send"
+            android:background="@drawable/ic_action_name"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
 </RelativeLayout>

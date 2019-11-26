@@ -7,5 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="MenuStyle" parent="Theme.AppCompat.Light">
+        <item name="android:background">@color/colorAccent</item>
+    </style>
 
 </resources>
