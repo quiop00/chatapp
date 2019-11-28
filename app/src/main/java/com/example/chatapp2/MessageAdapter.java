@@ -21,10 +21,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView tvMessage;
         ImageView profileImage;
+        TextView tvSeen;
         public ViewHolder(View itemView){
             super(itemView);
             tvMessage=itemView.findViewById(R.id.tv_show_message);
             profileImage=itemView.findViewById(R.id.profile_image);
+            tvSeen=itemView.findViewById(R.id.tv_seen);
         }
     }
     public  static final int MSG_TYPE_LEFT=0;
@@ -63,6 +65,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
          else{
              Glide.with(mContext).load(imgageurl).into(holder.profileImage);
 
+         }
+         if(position==mChat.size()-1){
+             if(chat.isIsseen()){
+                 holder.tvSeen.setText("Seen");
+             }
+         }else{
+             holder.tvSeen.setVisibility(View.GONE);
          }
 
     }

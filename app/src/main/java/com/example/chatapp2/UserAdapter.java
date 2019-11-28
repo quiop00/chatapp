@@ -10,26 +10,39 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import java.util.List;
-
 public class UserAdapter extends RecyclerView.Adapter <UserAdapter.ViewHolder>{
      class ViewHolder extends RecyclerView.ViewHolder{
          TextView tvUsername;
          ImageView profileImage;
+         private ImageView imgOn;
+         private  ImageView imgOff;
+         TextView tvLastMsg;
         public ViewHolder(View itemView){
             super(itemView);
             tvUsername=itemView.findViewById(R.id.tv_username);
             profileImage=itemView.findViewById(R.id.profile_image);
+            imgOn=itemView.findViewById(R.id.img_on);
+            imgOff=itemView.findViewById(R.id.img_off);
+            tvLastMsg=itemView.findViewById(R.id.tv_last_msg);
         }
     }
     private Context mContext;
     private List<User> mUsers;
-    public  UserAdapter(Context context,List<User> users){
+    private boolean isChat;
+    String lastMsg;
+    public  UserAdapter(Context context,List<User> users,boolean isChat){
         this.mContext=context;
         this.mUsers=users;
+        this.isChat=isChat;
     }
     @NonNull
     @Override
@@ -48,12 +61,65 @@ public class UserAdapter extends RecyclerView.Adapter <UserAdapter.ViewHolder>{
         }else{
             Glide.with(mContext).load(user.getImageURL()).into(holder.profileImage);
         }
+        if(isChat){
+            lastMessage(user.getId(),holder.tvLastMsg);
+        }
+        else{
+            holder.tvLastMsg.setVisibility(View.GONE);
+        }
+        if(isChat){
+            if(user.getStatus().equals("online")){
+                holder.imgOn.setVisibility(View.VISIBLE);
+                holder.imgOff.setVisibility(View.GONE);
+
+
+            }
+            else{
+                holder.imgOn.setVisibility(View.GONE);
+                holder.imgOff.setVisibility(View.VISIBLE);
+
+            }
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(mContext,MessageActivity.class);
                 intent.putExtra("userid",user.getId());
                 mContext.startActivity(intent);
+            }
+        });
+    }
+    private void lastMessage(final String userid, final TextView tvLastMsg){
+        lastMsg="default";
+        final FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference= FirebaseDatabase.getInstance().getReference("Chats");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                    Chat chat=snapshot.getValue(Chat.class);
+                    if(firebaseUser!=null){
+                    if(chat.getReceiver().equals(firebaseUser.getUid())&&chat.getSender().equals(userid)||
+                    chat.getSender().equals(firebaseUser.getUid())&&chat.getReceiver().equals(userid)){
+                        lastMsg=chat.getMessage();
+                    }
+                    }
+                }
+                switch (lastMsg){
+                    case "default":
+                        tvLastMsg.setText("No message");
+                        break;
+                    default:
+                        tvLastMsg.setText(lastMsg);
+                        break;
+
+                }
+                lastMsg="default";
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }

@@ -20,5 +20,11 @@
         android:text="Hello"
         android:padding="8dp"
         android:background="@drawable/background_left"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_seen"
+            android:layout_below="@id/tv_show_message"
+            android:visibility="gone"/>
     </RelativeLayout>
 </RelativeLayout>

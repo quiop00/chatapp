@@ -25,6 +25,13 @@
             android:padding="8dp"
             android:textColor="#fff"
             android:background="@drawable/background_right"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_seen"
+            android:layout_below="@id/tv_show_message"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
 </RelativeLayout>

@@ -26,13 +26,17 @@ public class TopBarAdapter extends FragmentPagerAdapter {
                 ContactsFragment contact=new ContactsFragment();
                 return contact;
             }
+            case 3:{
+                ProfileFragment profile=new ProfileFragment();
+                return profile;
+            }
         }
         return null;
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Nullable
@@ -45,6 +49,8 @@ public class TopBarAdapter extends FragmentPagerAdapter {
                 return "Group Chat";
             case 2:
                 return "Contact";
+            case 3:
+                return  "Profile";
         }
         return null;
     }
