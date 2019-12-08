@@ -68,6 +68,16 @@
                 android:textColor="#004673"
                 android:textAlignment="center"
                 android:layout_marginTop="10dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/forgot_password"
+                android:layout_below="@+id/new_account"
+                android:text="Forgot you password?"
+                android:textColor="#ff0000"
+                android:layout_marginTop="10dp"
+                android:textAlignment="center"
+                />
         </RelativeLayout>
 
     </ScrollView>

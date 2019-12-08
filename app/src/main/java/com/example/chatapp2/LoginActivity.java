@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,13 +24,15 @@ public class LoginActivity extends AppCompatActivity {
     EditText edtEmail,edtPassword;
     Button btnLogin;
     FirebaseAuth auth;
-    DatabaseReference reference;
+   // DatabaseReference reference;
     Toolbar toolbar;
+    TextView forgot_password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         init();
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,16 +46,24 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+        forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this,ResetPasswordActivity.class));
+            }
+        });
     }
+
     public void init(){
         edtEmail=findViewById(R.id.edt_login_email);
         edtPassword=findViewById(R.id.edt_login_password);
         btnLogin=findViewById(R.id.btn_login);
+        forgot_password=findViewById(R.id.forgot_password);
         auth=FirebaseAuth.getInstance();
         toolbar=findViewById(R.id.main_page_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Login");
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
     public void login(String email,String password){
         auth.signInWithEmailAndPassword(email,password)

@@ -65,7 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
         toolbar=findViewById(R.id.main_page_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Register");
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
     public void register(final String username, String email, String password){
         auth.createUserWithEmailAndPassword(email,password)
