@@ -7,5 +7,4 @@ first push : 22/11/2019
 -chat
 -Online-Offline
 -Set avatar profile
-
-
+-forgot password
