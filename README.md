@@ -8,3 +8,5 @@ first push : 22/11/2019
 -Online-Offline
 -Set avatar profile
 -forgot password
+-new message notice
+-send image
