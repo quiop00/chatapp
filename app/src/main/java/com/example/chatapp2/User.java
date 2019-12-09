@@ -5,6 +5,16 @@ public class User {
     private String username;
     private String imageURL;
     private String status;
+    private boolean isseen;
+
+    public boolean isIsseen() {
+        return isseen;
+    }
+
+    public void setIsseen(boolean isseen) {
+        this.isseen = isseen;
+    }
+
     public User() {
     }
 

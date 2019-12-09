@@ -22,11 +22,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         TextView tvMessage;
         ImageView profileImage;
         TextView tvSeen;
+        ImageView imageMessage;
         public ViewHolder(View itemView){
             super(itemView);
             tvMessage=itemView.findViewById(R.id.tv_show_message);
             profileImage=itemView.findViewById(R.id.profile_image);
             tvSeen=itemView.findViewById(R.id.tv_seen);
+            imageMessage=itemView.findViewById(R.id.img_show);
         }
     }
     public  static final int MSG_TYPE_LEFT=0;
@@ -58,13 +60,18 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
          Chat chat=mChat.get(position);
-         holder.tvMessage.setText(chat.getMessage());
+         if(!holder.tvMessage.equals(""))
+            holder.tvMessage.setText(chat.getMessage());
+         else holder.tvMessage.setVisibility(View.GONE);
          if(imgageurl.equals("default")){
              holder.profileImage.setImageResource(R.mipmap.ic_launcher);
          }
          else{
              Glide.with(mContext).load(imgageurl).into(holder.profileImage);
 
+         }
+         if(!holder.imageMessage.equals("")){
+             Glide.with(mContext).load(chat.getImage()).into(holder.imageMessage);
          }
          if(position==mChat.size()-1){
              if(chat.isIsseen()){

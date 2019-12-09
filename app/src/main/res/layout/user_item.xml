@@ -59,4 +59,11 @@
         android:layout_marginLeft="25dp"
         android:textSize="15sp"
         android:textColor="@color/colorPrimary"/>
+    <ImageView
+        android:id="@+id/img_new_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_new"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"/>
 </RelativeLayout>

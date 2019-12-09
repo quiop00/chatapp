@@ -26,5 +26,11 @@
             android:id="@+id/tv_seen"
             android:layout_below="@id/tv_show_message"
             android:visibility="gone"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_toRightOf="@id/profile_image"
+            android:layout_marginLeft="5dp"
+            android:id="@+id/img_show"/>
     </RelativeLayout>
 </RelativeLayout>

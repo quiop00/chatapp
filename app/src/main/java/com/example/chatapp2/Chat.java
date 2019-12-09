@@ -2,9 +2,12 @@ package com.example.chatapp2;
 
 public class Chat {
     private String sender;
+
+
     private String receiver;
     private String message;
     private boolean isseen;
+    private String image;
 
     public boolean isIsseen() {
         return isseen;
@@ -42,4 +45,12 @@ public class Chat {
     public void setMessage(String message) {
         this.message = message;
     }
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
 }

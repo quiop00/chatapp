@@ -10,29 +10,25 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
+import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 
 public class LoginActivity extends AppCompatActivity {
     EditText edtEmail,edtPassword;
     Button btnLogin;
     FirebaseAuth auth;
-   // DatabaseReference reference;
     Toolbar toolbar;
-    TextView forgot_password;
+    TextView tvForgotPassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         init();
-
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,21 +42,20 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-        forgot_password.setOnClickListener(new View.OnClickListener() {
+        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LoginActivity.this,ResetPasswordActivity.class));
             }
         });
     }
-
     public void init(){
         edtEmail=findViewById(R.id.edt_login_email);
         edtPassword=findViewById(R.id.edt_login_password);
         btnLogin=findViewById(R.id.btn_login);
-        forgot_password=findViewById(R.id.forgot_password);
         auth=FirebaseAuth.getInstance();
         toolbar=findViewById(R.id.main_page_toolbar);
+        tvForgotPassword=findViewById(R.id.forgot_password);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Login");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

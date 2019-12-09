@@ -18,11 +18,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 import java.util.List;
 public class UserAdapter extends RecyclerView.Adapter <UserAdapter.ViewHolder>{
      class ViewHolder extends RecyclerView.ViewHolder{
          TextView tvUsername;
          ImageView profileImage;
+         ImageView newMessageImage;
          private ImageView imgOn;
          private  ImageView imgOff;
          TextView tvLastMsg;
@@ -33,6 +36,7 @@ public class UserAdapter extends RecyclerView.Adapter <UserAdapter.ViewHolder>{
             imgOn=itemView.findViewById(R.id.img_on);
             imgOff=itemView.findViewById(R.id.img_off);
             tvLastMsg=itemView.findViewById(R.id.tv_last_msg);
+            newMessageImage=itemView.findViewById(R.id.img_new_message);
         }
     }
     private Context mContext;
@@ -80,14 +84,45 @@ public class UserAdapter extends RecyclerView.Adapter <UserAdapter.ViewHolder>{
 
             }
         }
+        isSeenMessage(user.getId(),holder.newMessageImage);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
+                final DatabaseReference charReceiver=FirebaseDatabase.getInstance().getReference("Chatlist")
+                        .child(firebaseUser.getUid()).child(user.getId());
+                HashMap<String,Object> hashMap=new HashMap<>();
+                hashMap.put("isseen",true);
+                charReceiver.updateChildren(hashMap);
                 Intent intent=new Intent(mContext,MessageActivity.class);
                 intent.putExtra("userid",user.getId());
                 mContext.startActivity(intent);
             }
         });
+    }
+    private void isSeenMessage(final String userid,final ImageView imageView){
+        final FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+        if(firebaseUser!=null){
+            final DatabaseReference seenListener=FirebaseDatabase.getInstance().getReference("Chatlist")
+                    .child(firebaseUser.getUid());
+            seenListener.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                        Chatlist chat=snapshot.getValue(Chatlist.class);
+                        if(!chat.isIsseen()){
+                            imageView.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
     }
     private void lastMessage(final String userid, final TextView tvLastMsg){
         lastMsg="default";

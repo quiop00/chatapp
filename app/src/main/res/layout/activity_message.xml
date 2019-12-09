@@ -41,12 +41,20 @@
         android:layout_alignParentBottom="true"
         android:background="#fff"
         android:padding="5dp">
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/btn_sendMedia"
+            android:background="@drawable/ic_action"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/edt_send"
             android:hint="Type a message..."
-            android:layout_toLeftOf="@+id/btn_send"
+            android:layout_toEndOf="@id/btn_sendMedia"
+            android:layout_toStartOf="@+id/btn_send"
             android:layout_centerVertical="true"/>
         <ImageButton
             android:layout_width="40dp"
