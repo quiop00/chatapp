@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     EditText edtEmail,edtPassword;
-    Button btnLogin;
+    Button btnLogin,btnRegister;
     FirebaseAuth auth;
     Toolbar toolbar;
     TextView tvForgotPassword;
@@ -42,6 +42,13 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
         tvForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         edtEmail=findViewById(R.id.edt_login_email);
         edtPassword=findViewById(R.id.edt_login_password);
         btnLogin=findViewById(R.id.btn_login);
+        btnRegister=findViewById(R.id.new_account);
         auth=FirebaseAuth.getInstance();
         toolbar=findViewById(R.id.main_page_toolbar);
         tvForgotPassword=findViewById(R.id.forgot_password);

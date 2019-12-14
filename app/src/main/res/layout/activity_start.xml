@@ -1,26 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".StartActivity">
+    tools:context=".StartActivity"
+    tools:ignore="VectorDrawableCompat">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/bgHeader"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:background="@drawable/header_login"
+        android:elevation="5dp" />
+
     <TextView
+        android:id="@+id/tvDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chat app"
-        android:textSize="25sp"/>
-    <Button
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="40dp"
+        android:elevation="5dp"
+        android:text="Welcome to apps"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp" />
+    <ImageView
+        android:id="@+id/circle1"
+        android:layout_width="134dp"
+        android:layout_height="134dp"
+        android:layout_below="@+id/bgHeader"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="-80dp"
+        android:layout_marginRight="-100dp"
+        android:src="@drawable/circletransparant"/>
+
+    <ImageView
+        android:id="@+id/circle2"
+        android:layout_width="134dp"
+        android:layout_height="134dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/circletransparant"/>
+
+    <ImageView
+        android:id="@+id/circle3"
+        android:layout_width="182dp"
+        android:layout_height="182dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="-80dp"
+        android:layout_marginBottom="-30dp"
+        android:src="@drawable/circletransparant" />
+
+    <ImageView
+        android:id="@+id/circle4"
+        android:layout_width="134dp"
+        android:layout_height="134dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="-50dp"
+        android:layout_marginBottom="-50dp"
+        android:layout_toLeftOf="@+id/circle3"
+        android:src="@drawable/circletransparant" />
+
+    <ScrollView
+        android:id="@+id/sv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:id="@+id/btn_login"
-        />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:id="@+id/btn_register"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/bgHeader">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cv"
+            android:layout_alignLeft="@+id/cv"
+            android:layout_alignRight="@+id/cv"
+            android:layout_margin="60dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="-50dp"
+            android:layout_marginRight="35dp"
+            android:elevation="10dp">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_ui"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:text="Login"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:textAllCaps="false"
+                android:id="@+id/btn_login"
+                android:textColor="@color/colorAccent" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_login"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/bg_ui"
+                android:id="@+id/btn_register"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="Register"
+                android:textColor="@color/colorAccent" />
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

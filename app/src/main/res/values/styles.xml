@@ -10,5 +10,12 @@
     <style name="MenuStyle" parent="Theme.AppCompat.Light">
         <item name="android:background">@color/colorAccent</item>
     </style>
+    <style name="AppTheme.FullScreen">
+            <item name="windowActionBar">false</item>
+            <item name="windowNoTitle">true</item>
+            <item name="android:windowFullscreen">true</item>
+            <item name="android:windowContentOverlay">@null</item>
+
+    </style>
 
 </resources>

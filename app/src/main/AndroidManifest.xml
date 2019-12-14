@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MessageActivity"></activity>
-        <activity android:name=".StartActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,11 +22,8 @@
         </activity>
         <activity
             android:name=".RegisterActivity"
-            android:parentActivityName=".StartActivity" />
+            android:parentActivityName=".LoginActivity" />
         <activity android:name=".MainActivity" />
-        <activity
-            android:name=".LoginActivity"
-            android:parentActivityName=".StartActivity" />
         <activity android:name=".ResetPasswordActivity"
             android:parentActivityName=".LoginActivity"></activity>
 
