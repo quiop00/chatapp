@@ -10,3 +10,4 @@ first push : 22/11/2019
 -forgot password
 -new message notice
 -send image
+-custom login and register
