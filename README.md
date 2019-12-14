@@ -11,3 +11,4 @@ first push : 22/11/2019
 -new message notice
 -send image
 -custom login and register
+- block/ unblock chat
