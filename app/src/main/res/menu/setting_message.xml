@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/setting_message"
+    >
+    <item android:title="Block"
+        android:id="@+id/block"
+        android:icon="@drawable/ic_block"
+        app:showAsAction="ifRoom"
+        android:visible="true"></item>
+    <item android:title="UnBlock"
+        android:icon="@drawable/ic_unblock"
+        app:showAsAction="ifRoom"
+        android:id="@+id/unblock" android:visible="true"/>
+</menu>
