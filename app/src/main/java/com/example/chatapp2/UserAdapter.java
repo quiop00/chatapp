@@ -104,16 +104,16 @@ public class UserAdapter extends RecyclerView.Adapter <UserAdapter.ViewHolder>{
         final FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         if(firebaseUser!=null){
             final DatabaseReference seenListener=FirebaseDatabase.getInstance().getReference("Chatlist")
-                    .child(firebaseUser.getUid());
+                    .child(firebaseUser.getUid()).child(userid);
             seenListener.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-                        Chatlist chat=snapshot.getValue(Chatlist.class);
+
+                        Chatlist chat=dataSnapshot.getValue(Chatlist.class);
                         if(!chat.isIsseen()){
                             imageView.setVisibility(View.VISIBLE);
                         }
-                    }
+
                 }
 
                 @Override

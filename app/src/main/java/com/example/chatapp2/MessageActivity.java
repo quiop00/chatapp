@@ -12,17 +12,19 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,7 +35,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -45,9 +46,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 public class MessageActivity extends AppCompatActivity {
     CircleImageView profileImage;
@@ -61,34 +60,70 @@ public class MessageActivity extends AppCompatActivity {
     MessageAdapter messageAdapter;
     List<Chat> chats;
     RecyclerView recyclerView;
-    ValueEventListener seenListener,isseen;
+    ValueEventListener seenListener;
     String userid;
     StorageReference storageReference;
     String checker,image;
     Uri imageUri;
     StorageTask uploadTask;
-    boolean notify=false;
+    boolean notify,blocked,beBlocked;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         init();
+        notify=false;
+        //block user
+        blocked=false;
+        //be blocked by user
+        beBlocked=false;
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MessageActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
-
-
         intent=getIntent();
+        firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         userid=intent.getStringExtra("userid");
+        final DatabaseReference charRef=FirebaseDatabase.getInstance().getReference("Blocklist")
+                .child(firebaseUser.getUid())
+                .child(userid);
+        charRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    beBlocked= dataSnapshot.getValue(Blocklist.class).isBeBlocked();
+                    blocked=dataSnapshot.getValue(Blocklist.class).isBlocked();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 notify=true;
                 String msg=edtMessage.getText().toString();
-                if(!msg.equals("")){
+                if(beBlocked){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MessageActivity.this);
+                    builder.setMessage("Sorry! You have been blocked by this user")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // Handle Ok
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // Handle Cancel
+                                }
+                            })
+                            .create();
+                    builder.show();
+                }
+                if(!msg.equals("")&&!beBlocked){
                     sendMessage(firebaseUser.getUid(),userid,msg,"");
                 }
                 else{
@@ -124,7 +159,7 @@ public class MessageActivity extends AppCompatActivity {
                 builder.show();
             }
         });
-        firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+
         reference= FirebaseDatabase.getInstance().getReference("Users").child(userid);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -232,6 +267,177 @@ public class MessageActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         storageReference= FirebaseStorage.getInstance().getReference("messageImages");
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.setting_message,menu);
+        return true;
+    }
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+
+        MenuItem block = menu.findItem(R.id.block);
+        MenuItem unblock=menu.findItem(R.id.unblock);
+        if(blocked)
+        {
+            block.setVisible(false);
+            unblock.setVisible(true);
+        }
+        else
+        {
+            block.setVisible(true);
+            unblock.setVisible(false);
+        }
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.block:{
+                AlertDialog.Builder builder = new AlertDialog.Builder(MessageActivity.this);
+                builder.setMessage("Do you sure to block this user ?")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                doBlock();
+                                Intent intent=new Intent(MessageActivity.this,MainActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // Handle Cancel
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+
+                dialog.show();
+                return true;
+            }
+            case R.id.unblock:{
+                AlertDialog.Builder builder = new AlertDialog.Builder(MessageActivity.this);
+                builder.setMessage("Do you sure to unblock this user ?")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                doUnBlock();
+                                Intent intent=new Intent(MessageActivity.this,MainActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // Handle Cancel
+                            }
+                        })
+                        .create();
+                builder.show();
+                return true;
+            }
+        }
+        return false;
+    }
+    // do block user
+    public void doBlock(){
+        final DatabaseReference charRef=FirebaseDatabase.getInstance().getReference("Blocklist")
+                .child(userid)
+                .child(firebaseUser.getUid());
+        charRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    charRef.child("beBlocked").setValue(true);
+                    charRef.child("blocked").setValue(false);
+                }
+                else{
+                    HashMap<String,Object> hashMap=new HashMap<>();
+                    hashMap.put("beBlocked",true);
+                    hashMap.put("blocked",false);
+                    dataSnapshot.getRef().updateChildren(hashMap);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        final DatabaseReference charRec=FirebaseDatabase.getInstance().getReference("Blocklist")
+                .child(firebaseUser.getUid())
+                .child(userid);
+        charRec.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    charRec.child("blocked").setValue(true);
+                    charRec.child("beBlocked").setValue(false);
+                }
+                else{
+                    HashMap<String,Object> hashMap=new HashMap<>();
+                    hashMap.put("blocked",true);
+                    hashMap.put("beBlocked",false);
+                    dataSnapshot.getRef().updateChildren(hashMap);
+
+                }
+                blocked=true;
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    // do unBlock user
+    public void doUnBlock(){
+        final DatabaseReference charRef=FirebaseDatabase.getInstance().getReference("Blocklist")
+                .child(userid)
+                .child(firebaseUser.getUid());
+        charRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    charRef.child("beBlocked").setValue(false);
+                    charRef.child("blocked").setValue(false);
+                }
+                else{
+                    HashMap<String,Object> hashMap=new HashMap<>();
+                    hashMap.put("beBlocked",false);
+                    hashMap.put("blocked",false);
+                    dataSnapshot.getRef().updateChildren(hashMap);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        final DatabaseReference charRec=FirebaseDatabase.getInstance().getReference("Blocklist")
+                .child(firebaseUser.getUid())
+                .child(userid);
+        charRec.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    charRec.child("blocked").setValue(false);
+                    charRec.child("beBlocked").setValue(false);
+                }
+                else{
+                    HashMap<String,Object> hashMap=new HashMap<>();
+                    hashMap.put("blocked",false);
+                    hashMap.put("beBlocked",false);
+                    dataSnapshot.getRef().updateChildren(hashMap);
+
+                }
+                blocked=false;
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
     private void seenMessage(final String userid){
         reference=FirebaseDatabase.getInstance().getReference("Chats");
         seenListener=reference.addValueEventListener(new ValueEventListener() {
@@ -252,30 +458,10 @@ public class MessageActivity extends AppCompatActivity {
 
             }
         });
-//        final DatabaseReference charReceiver=FirebaseDatabase.getInstance().getReference("Chatlist")
-//                .child(userid);
-//        charReceiver.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-//                    Chatlist chat=snapshot.getValue(Chatlist.class);
-//                    if(chat.getReceiver().equals(firebaseUser.getUid())){
-//                        HashMap<String,Object> hashMap=new HashMap<>();
-//                        hashMap.put("isseen",true);
-//                        snapshot.getRef().updateChildren(hashMap);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
     }
+    // send message
     public void sendMessage(String sender, final String receiver, String message,String imgUrl){
+        
         DatabaseReference reference=FirebaseDatabase.getInstance().getReference();
         HashMap<String,Object> hashMap=new HashMap<>();
         hashMap.put("sender",sender);
