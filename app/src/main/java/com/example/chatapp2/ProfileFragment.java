@@ -114,6 +114,7 @@ public class ProfileFragment extends Fragment {
         MimeTypeMap mimeTypeMap=MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
+
     private void uploadImage() {
         final ProgressDialog progress = new ProgressDialog(getContext());
         progress.setMessage("Uploading");

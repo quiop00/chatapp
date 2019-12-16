@@ -89,6 +89,9 @@ public class MessageActivity extends AppCompatActivity {
         final DatabaseReference charRef=FirebaseDatabase.getInstance().getReference("Blocklist")
                 .child(firebaseUser.getUid())
                 .child(userid);
+        /*
+            Check if the message have been blocked, be blocked
+        */
         charRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -107,6 +110,9 @@ public class MessageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 notify=true;
                 String msg=edtMessage.getText().toString();
+                /*
+                    if current users have been blocked,they couldn't send the message
+                */
                 if(beBlocked){
                     AlertDialog.Builder builder = new AlertDialog.Builder(MessageActivity.this);
                     builder.setMessage("Sorry! You have been blocked by this user")
@@ -139,9 +145,11 @@ public class MessageActivity extends AppCompatActivity {
                 CharSequence options[]=new CharSequence[]{
                         "Images"
                 };
+                /*
+                    Create an alert dialog to notify about choose image
+                */
                 AlertDialog.Builder builder=new AlertDialog.Builder(MessageActivity.this);
                 builder.setTitle("Select the File");
-
                 builder.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
@@ -207,6 +215,9 @@ public class MessageActivity extends AppCompatActivity {
         MimeTypeMap mimeTypeMap=MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
+    /*
+        Method upload image from device to firebase storage
+    */
     private void uploadImage() {
         final ProgressDialog progress = new ProgressDialog(MessageActivity.this);
         progress.setMessage("Uploading");
@@ -272,6 +283,9 @@ public class MessageActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.setting_message,menu);
         return true;
     }
+    /*
+        display block icon/ unblock icon
+    */
     public boolean onPrepareOptionsMenu(Menu menu)
     {
 
@@ -438,6 +452,9 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
     }
+    /*
+        check message have been seen yet, update message status to firebase
+    */
     private void seenMessage(final String userid){
         reference=FirebaseDatabase.getInstance().getReference("Chats");
         seenListener=reference.addValueEventListener(new ValueEventListener() {
@@ -521,6 +538,7 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
     }
+    //method display message from another user
     public void readMessage(final String myid, final String userid, final String imageurl){
         chats=new ArrayList<>();
         reference=FirebaseDatabase.getInstance().getReference("Chats");

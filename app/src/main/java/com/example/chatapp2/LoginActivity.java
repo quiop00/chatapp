@@ -26,7 +26,12 @@ public class LoginActivity extends AppCompatActivity {
     TextView tvForgotPassword;
     FirebaseUser firebaseUser;
     @Override
+
     protected void onStart() {
+        /*
+        Check If user haven't logout, in the next accession to the app,
+        user would be in Main Page, not Login Page
+        */
         super.onStart();
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         if(firebaseUser!=null){

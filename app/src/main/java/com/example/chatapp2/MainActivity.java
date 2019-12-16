@@ -49,8 +49,8 @@ public  class MainActivity extends AppCompatActivity {
                     profileImage.setImageResource(R.mipmap.ic_launcher);
                 }
                 else{
+                    //Set image from firebase storage
                     Glide.with(getApplicationContext()).load(user.getImageURL()).into(profileImage);
-
                 }
             }
 
@@ -72,16 +72,12 @@ public  class MainActivity extends AppCompatActivity {
         mTabLayout=findViewById(R.id.main_tabs);
         profileImage=findViewById(R.id.profile_image);
         userName=findViewById(R.id.username);
-
-
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_top,menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
@@ -93,20 +89,18 @@ public  class MainActivity extends AppCompatActivity {
          }
         return false;
     }
+    /*Set status online/offline of user into firebase*/
     private void status(String status){
         reference=FirebaseDatabase.getInstance().getReference("Users").child(mCurrentUser.getUid());
         HashMap<String,Object> hashMap=new HashMap<>();
         hashMap.put("status",status);
         reference.updateChildren(hashMap);
-
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         status("online");
     }
-
     @Override
     protected void onPause() {
         super.onPause();

@@ -71,6 +71,9 @@ public class ContactsFragment extends Fragment {
 
         return view;
     }
+    /*
+        Autofilter search user by username
+    */
     public void search(String user){
         final FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
         Query query=FirebaseDatabase.getInstance().getReference("Users").orderByChild("search")
@@ -98,6 +101,9 @@ public class ContactsFragment extends Fragment {
         });
     }
     public void readUsers(){
+        /*
+            Get all user in app and display in ContactFragment
+        */
         final FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference= FirebaseDatabase.getInstance().getReference("Users");
         reference.addValueEventListener(new ValueEventListener() {

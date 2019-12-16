@@ -75,8 +75,6 @@ public class UserAdapter extends RecyclerView.Adapter <UserAdapter.ViewHolder>{
             if(user.getStatus().equals("online")){
                 holder.imgOn.setVisibility(View.VISIBLE);
                 holder.imgOff.setVisibility(View.GONE);
-
-
             }
             else{
                 holder.imgOn.setVisibility(View.GONE);
@@ -113,16 +111,12 @@ public class UserAdapter extends RecyclerView.Adapter <UserAdapter.ViewHolder>{
                         if(!chat.isIsseen()){
                             imageView.setVisibility(View.VISIBLE);
                         }
-
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 }
             });
         }
-
     }
     private void lastMessage(final String userid, final TextView tvLastMsg){
         lastMsg="default";
@@ -134,10 +128,10 @@ public class UserAdapter extends RecyclerView.Adapter <UserAdapter.ViewHolder>{
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
                     Chat chat=snapshot.getValue(Chat.class);
                     if(firebaseUser!=null){
-                    if(chat.getReceiver().equals(firebaseUser.getUid())&&chat.getSender().equals(userid)||
-                    chat.getSender().equals(firebaseUser.getUid())&&chat.getReceiver().equals(userid)){
-                        lastMsg=chat.getMessage();
-                    }
+                        if(chat.getReceiver().equals(firebaseUser.getUid())&&chat.getSender().equals(userid)||
+                        chat.getSender().equals(firebaseUser.getUid())&&chat.getReceiver().equals(userid)){
+                            lastMsg=chat.getMessage();
+                        }
                     }
                 }
                 switch (lastMsg){
@@ -147,7 +141,6 @@ public class UserAdapter extends RecyclerView.Adapter <UserAdapter.ViewHolder>{
                     default:
                         tvLastMsg.setText(lastMsg);
                         break;
-
                 }
                 lastMsg="default";
             }
@@ -158,9 +151,6 @@ public class UserAdapter extends RecyclerView.Adapter <UserAdapter.ViewHolder>{
             }
         });
     }
-
-
-
     @Override
     public int getItemCount() {
         return mUsers.size();

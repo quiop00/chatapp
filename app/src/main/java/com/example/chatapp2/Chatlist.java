@@ -1,5 +1,10 @@
 package com.example.chatapp2;
-
+/*
+    class Chatlist include:
+    -id
+    -isseen: check if message which you had sent, have been seen by another user
+    -receiver:equal userid
+*/
 public class Chatlist {
     private  String id;
     private  boolean isseen;

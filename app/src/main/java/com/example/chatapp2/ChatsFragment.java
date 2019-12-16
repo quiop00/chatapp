@@ -51,6 +51,9 @@ public class ChatsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         usersList=new ArrayList<>();
+        /*
+            Get list of user you have sent message or receiver message from reference "Chatlist"
+        */
         reference=FirebaseDatabase.getInstance().getReference("Chatlist").child(firebaseUser.getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -72,6 +75,10 @@ public class ChatsFragment extends Fragment {
     }
 
     private  void chatlist(){
+        /*
+            Get list of user you have sent message or receiver message
+            and display it in chatfragment
+        */
         mUsers=new ArrayList<>();
         reference=FirebaseDatabase.getInstance().getReference("Users");
         reference.addValueEventListener(new ValueEventListener() {
